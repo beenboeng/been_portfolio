@@ -1,36 +1,83 @@
-<div class="hero min-h-screen bg-base-200">
-  <div class="hero-content flex-col lg:flex-row">
-    <img
-      src="/images/ohai.jpg"
-      class="max-w-sm rounded-lg shadow-2xl"
-      alt="img"
-    />
-    <div>
-      <div class="header flex flex-col gap-2">
-        <div class="text-5xl font-bold text-accent-content">Hi wellcome!!</div>
-        <div class="text-lg">I am Been</div>
-        <div>They call me Been the best of the best</div>
-      </div>
-      <div class="flex gap-5 items-center mt-2">
-        <div>
-          <button class="btn btn-neutral" onclick="my_modal_5.showModal()"
-            >Call Me</button
+<script lang="ts">
+  import { onMount } from "svelte";
+
+  let themes = ["dark", "light"];
+  let current_theme = "light";
+  let web_mode = false;
+
+  onMount(() => {
+    if (typeof window !== "undefined") {
+      const theme = window.localStorage.getItem("theme");
+      if (theme && themes.includes(theme)) {
+        document.documentElement.setAttribute("data-theme", theme);
+        current_theme = theme;
+        web_mode = theme == "light" ? (web_mode = true) : false;
+      }
+    }
+  });
+
+  function set_theme() {
+    const theme = web_mode ? "dark" : "light";
+    if (themes.includes(theme)) {
+      const one_year = 60 * 60 * 24 * 365;
+      window.localStorage.setItem("theme", theme);
+      document.cookie = `theme=${theme}; max-age=${one_year}; path=/; SameSite=Lax`;
+      document.documentElement.setAttribute("data-theme", theme);
+      current_theme = theme;
+    }
+  }
+</script>
+
+<div class="home">
+  <div class="top-menu sticky top-0 z-50">
+    <div class="navbar bg-base-100">
+      <div class="navbar-start">
+        <div class="dropdown">
+          <label tabindex="0" class="btn btn-ghost lg:hidden">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-7 w-7"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              ><path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h8m-8 6h16"
+              /></svg
+            >
+          </label>
+          <ul
+            class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
           >
-          <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
-            <form method="dialog" class="modal-box">
-              <h3 class="font-bold text-lg">Hey Sweeties!</h3>
-              <p>Wanna call me? You can call me Daddy!!</p>
-              <div class="modal-action">
-                <!-- if there is a button in form, it will close the modal -->
-                <button class="btn">Close</button>
-              </div>
-            </form>
-          </dialog>
+            <li><a>Home</a></li>
+            <li>
+              <a>About Me</a>
+            </li>
+            <li><a>Item 3</a></li>
+          </ul>
         </div>
+        <!-- <a class="btn btn-ghost normal-case text-xl">daisyUI</a> -->
+      </div>
+      <div class="navbar-center hidden lg:flex">
+        <ul class="menu menu-horizontal px-1">
+          <li><a>Home</a></li>
+          <li>
+            <a>About Me</a>
+          </li>
+          <li><a>Item 3</a></li>
+        </ul>
+      </div>
+      <div class="navbar-end">
         <div class="web-mode">
           <label class="swap swap-rotate">
             <!-- this hidden checkbox controls the state -->
-            <input type="checkbox" />
+            <input
+              type="checkbox"
+              on:change={set_theme}
+              bind:checked={web_mode}
+            />
 
             <!-- sun icon -->
             <svg
@@ -56,4 +103,44 @@
       </div>
     </div>
   </div>
+  <section id="home">
+    <div class="hero min-h-screen">
+      <div class="hero-content flex-col lg:flex-row">
+        <img
+          src="/images/ohai.jpg"
+          class="max-w-sm rounded-lg shadow-2xl w-[300px] md:w-auto"
+          alt="img"
+        />
+        <div>
+          <div class="header flex flex-col gap-2">
+            <div class="text-5xl font-bold text-accent-content">
+              Hi wellcome!!
+            </div>
+            <div class="text-lg">I am Been</div>
+            <div>They call me Been the best of the best</div>
+          </div>
+          <div class="flex gap-5 items-center mt-2">
+            <div>
+              <button class="btn btn-neutral" onclick="my_modal_5.showModal()"
+                >Call Me</button
+              >
+              <dialog
+                id="my_modal_5"
+                class="modal modal-bottom sm:modal-middle"
+              >
+                <form method="dialog" class="modal-box">
+                  <h3 class="font-bold text-lg">Hey Sweeties!</h3>
+                  <p>Wanna call me? You can call me Daddy!!</p>
+                  <div class="modal-action">
+                    <!-- if there is a button in form, it will close the modal -->
+                    <button class="btn">Close</button>
+                  </div>
+                </form>
+              </dialog>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>
